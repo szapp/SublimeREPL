@@ -46,6 +46,12 @@ class ReplInsertTextCommand(sublime_plugin.TextCommand):
         self.view.insert(edit, int(pos), text)
 
 
+class ReplOverwriteTextCommand(sublime_plugin.TextCommand):
+    def run(self, edit, start, end, text):
+        self.view.set_read_only(False)  # make sure view is writable
+        self.view.replace(edit, sublime.Region(start, end), text)
+
+
 class ReplEraseTextCommand(sublime_plugin.TextCommand):
     def run(self, edit, start, end):
         self.view.set_read_only(False)  # make sure view is writable
@@ -322,13 +328,36 @@ class ReplView(object):
         # remove color codes
         if self._filter_color_codes:
             unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
-            unistr = re.sub(r'.\x08', '', unistr)
             unistr = re.sub(r'\x01\x02', '', unistr)
 
-        # string is assumed to be already correctly encoded
-        self._view.run_command("repl_insert_text", {"pos": self._output_end - self._prompt_size, "text": unistr})
-        self._output_end += len(unistr)
-        self._view.show(self.input_region)
+        # Split text by each line
+        for part_n in unistr.splitlines(True):
+
+            # Split line by carriage returns
+            parts_r = part_n.split('\x0D')
+            for j, part_r in enumerate(parts_r):
+
+                # Split line parts by backspaces
+                parts_b = part_r.split('\x08')
+                for k, part_b in enumerate(parts_b):
+
+                    # Overwrite or insert text
+                    o_end = self._output_end - self._prompt_size
+                    self._view.run_command("repl_overwrite_text",
+                                           {"start": o_end,
+                                            "end": o_end+len(part_b),
+                                            "text": part_b})
+                    self._output_end += len(part_b)
+                    self._view.show(self.input_region)
+
+                    # Perform backspace on all but last item
+                    if k+1 < len(parts_b):
+                        self._output_end -= 1
+
+                # Perform carriage return (jump to beginning of current line)
+                if j+1 < len(parts_r):
+                    self._output_end = self._view.full_line(
+                        self._output_end).begin()
 
     def write_prompt(self, unistr):
         """Writes prompt from REPL into this view. Prompt is treated like
