@@ -40,6 +40,7 @@ cfg.InteractiveShell.readline_use = False
 cfg.InteractiveShell.autoindent = False
 cfg.InteractiveShell.colors = "NoColor"
 cfg.InteractiveShell.editor = os.environ.get("SUBLIMEREPL_EDITOR", editor)
+# cfg.InteractiveShellApp.exec_lines = ["import sys, os; sys.path.append(os.getcwd())"]
 
 # IPython 4.0.0
 if version > 3:
@@ -112,7 +113,11 @@ def complete(zmq_shell, req):
 
 def handle():
     while True:
-        msg = read_netstring(s).decode("utf-8")
+        try:
+            msg = read_netstring(s).decode("utf-8")
+        except ConnectionAbortedError:
+            break
+
         try:
             req = json.loads(msg)
             completions = complete(embedded_shell, req)
