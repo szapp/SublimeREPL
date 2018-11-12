@@ -16,6 +16,7 @@ if activate_this:
 try:
     import IPython
     IPYTHON = True
+    version = IPython.version_info[0]
 except ImportError:
     IPYTHON = False
 
@@ -24,28 +25,39 @@ if not IPYTHON:
     import code
     code.InteractiveConsole().interact()
 
-from IPython.config.loader import Config
+
+from traitlets.config.loader import Config
 
 editor = "subl -w"
 
 cfg = Config()
-cfg.InteractiveShell.use_readline = False
+cfg.InteractiveShell.readline_use = False
 cfg.InteractiveShell.autoindent = False
 cfg.InteractiveShell.colors = "NoColor"
 cfg.InteractiveShell.editor = os.environ.get("SUBLIMEREPL_EDITOR", editor)
 
-try:
-    # IPython 1.0.0
+# IPython 4.0.0
+if version > 3:
+    try:
+        from jupyter_console.app import ZMQTerminalIPythonApp
+
+        def kernel_client(zmq_shell):
+            return zmq_shell.kernel_client
+    except ImportError():
+        raise ImportError("jupyter_console required for IPython 4")
+# IPython 2-3
+elif version > 1:
     from IPython.terminal.console.app import ZMQTerminalIPythonApp
 
     def kernel_client(zmq_shell):
         return zmq_shell.kernel_client
-except ImportError:
-    # Older IPythons
+else:
+    # Ipython 1.0
     from IPython.frontend.terminal.console.app import ZMQTerminalIPythonApp
 
     def kernel_client(zmq_shell):
         return zmq_shell.kernel_manager
+
 
 
 embedded_shell = ZMQTerminalIPythonApp(config=cfg, user_ns={})
@@ -89,8 +101,14 @@ def send_netstring(sock, msg):
 
 def complete(zmq_shell, req):
     kc = kernel_client(zmq_shell)
-    msg_id = kc.shell_channel.complete(**req)
-    msg = kc.shell_channel.get_msg(timeout=10)
+    # IPython 4+
+    if version > 3:
+        msg_id = kc.complete(req['line'], req['cursor_pos'])
+    # Ipython 1-3
+    else:
+        msg_id = kc.shell_channel.complete(**req)
+
+    msg = kc.shell_channel.get_msg(timeout=0.5)
     if msg['parent_header']['msg_id'] == msg_id:
         return msg["content"]["matches"]
     return []
@@ -106,7 +124,7 @@ def handle():
             res = json.dumps(result)
             send_netstring(s, res)
         except Exception:
-            send_netstring(s, "[]")
+            send_netstring(s, b"[]")
 
 if ac_port:
     t = threading.Thread(target=handle)
