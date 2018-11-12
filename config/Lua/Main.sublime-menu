@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open", 
+                {"command": "repl_open",
                  "caption": "Lua",
                  "id": "repl_lua",
                  "mnemonic": "L",
@@ -18,10 +18,11 @@
                     "cmd": ["lua", "-i"],
                     "cwd": "$file_path",
                     "external_id": "lua",
+                    "view_id": "*REPL* [lua]",
                     "syntax": "Packages/Lua/Lua.tmLanguage"
                     }
                 }
-            ]   
+            ]
         }]
     }
 ]

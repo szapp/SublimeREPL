@@ -20,16 +20,17 @@
                         "type": "subprocess",
                         "encoding": "utf8",
                         "external_id": "scala",
+                        "view_id": "*REPL* [scala]",
                         "cmd": {"linux": ["scala"],
                                 "osx": ["scala"],
                                 "windows": ["scala.bat", "-i"]},
                         "soft_quit": "\nexit\n",
                         "cwd": "$file_path",
-                        "cmd_postfix": "\n", 
+                        "cmd_postfix": "\n",
                         "extend_env": {"osx": {"EMACS": "1", "PATH": "{PATH}:/usr/local/bin"},
                                        "linux": {"EMACS": "1", "PATH": "{PATH}:/usr/local/bin"},
                                        "windows": {"EMACS": "1"}},
-                        "suppress_echo": false, 
+                        "suppress_echo": false,
                         "syntax": "Packages/Scala/Scala.tmLanguage"
                         }
                     },
@@ -41,19 +42,20 @@
                         "type": "subprocess",
                         "encoding": "utf8",
                         "external_id": "scala",
+                        "view_id": "*REPL* [scala]",
                         "cmd": {"linux": ["sbt"],
                                 "osx": ["sbt"],
                                 "windows": ["sbt"]},
                         "soft_quit": "\nexit\n",
                         "cwd": "$folder",
-                        "cmd_postfix": "\n", 
+                        "cmd_postfix": "\n",
                         "extend_env": {"osx": {"EMACS": "1", "PATH": "{PATH}:/usr/local/bin"},
                                        "linux": {"EMACS": "1", "PATH": "{PATH}:/usr/local/bin"},
                                        "windows": {"EMACS": "1"}},
-                        "suppress_echo": false, 
+                        "suppress_echo": false,
                         "syntax": "Packages/Scala/Scala.tmLanguage"
                         }
-                    } 
+                    }
                 ]}
             ]
         }]

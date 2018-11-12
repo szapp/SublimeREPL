@@ -15,6 +15,7 @@
             "args":{
               "type":"subprocess",
               "external_id":"prolog",
+              "view_id": "*REPL* [prolog]",
               "encoding":"utf8",
               "cmd": ["sicstus"],
               "soft_quit":"\nexit\n",
