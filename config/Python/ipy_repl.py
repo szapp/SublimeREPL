@@ -127,6 +127,9 @@ def handle():
         except Exception:
             send_netstring(s, b"[]")
 
+    if ac_port:
+        s.close()
+
 if ac_port:
     t = threading.Thread(target=handle)
     t.start()
