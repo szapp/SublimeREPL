@@ -488,8 +488,9 @@ class ReplManager(object):
             r = repls.Repl.subclass(type)(encoding, **kwds)
             found = None
             for view in window.views():
-                if view.id() == view_id:
+                if view.name() == view_id:
                     found = view
+                    window.focus_view(found)
                     break
             view = found or window.new_file()
 

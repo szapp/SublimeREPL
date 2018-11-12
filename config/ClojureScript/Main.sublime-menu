@@ -26,6 +26,7 @@
                                 "osx": "$file_path"},
                         "syntax": "Packages/Clojure/Clojure.tmLanguage",
                         "external_id": "clojurescript",
+                        "view_id": "*REPL* [clojurescript]",
                         "extend_env": {"INSIDE_EMACS": "1"}
                         }
                     },
@@ -62,6 +63,7 @@
                                 "osx": "$file_path"},
                         "syntax": "Packages/Clojure/Clojure.tmLanguage",
                         "external_id": "clojurescript",
+                        "view_id": "*REPL* [clojurescript]",
                         "extend_env": {"INSIDE_EMACS": "1"}
                         }
                     }

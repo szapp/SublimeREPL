@@ -17,7 +17,8 @@
                     "encoding": "utf8",
                     "cmd": ["gdb"],
                     "cwd": "$file_path",
-                    "external_id": "gdb"
+                    "external_id": "gdb",
+                    "view_id": "*REPL* [gdb]"
                     }
                 }
             ]

@@ -23,6 +23,7 @@
                         "cwd": "$file_path",
                         "syntax": "Packages/Python/Python.tmLanguage",
                         "external_id": "python",
+                        "view_id": "*REPL* [python]",
                         "extend_env": {"PYTHONIOENCODING": "utf-8"}
                         }
                     },
@@ -40,6 +41,7 @@
                         "cwd": "$file_path",
                         "syntax": "Packages/Text/Plain text.tmLanguage",
                         "external_id": "python",
+                        "view_id": "*REPL* [python]",
                         "extend_env": {"PYTHONIOENCODING": "utf-8"}
                         }
                     },
@@ -54,6 +56,7 @@
                         "cwd": "$file_path",
                         "syntax": "Packages/Text/Plain text.tmLanguage",
                         "external_id": "python",
+                        "view_id": "*REPL* [python]",
                         "extend_env": {"PYTHONIOENCODING": "utf-8"}
                         }
                     },
@@ -73,6 +76,7 @@
                         "cwd": "$file_path",
                         "syntax": "Packages/Python/Python.tmLanguage",
                         "external_id": "python",
+                        "view_id": "*REPL* [ipython]",
                         "extend_env": {
                             "PYTHONIOENCODING": "utf-8",
                             "SUBLIMEREPL_EDITOR": "$editor"

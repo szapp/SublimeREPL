@@ -8,13 +8,14 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open", 
+                {"command": "repl_open",
                  "caption": "F#",
                  "id": "repl_f#",
                  "mnemonic": "F",
                  "args": {
                     "type": "subprocess",
                     "external_id": "fsharp",
+                    "view_id": "*REPL* [fsharp]",
                     "encoding": "utf8",
                     "cmd": {
                             "windows": ["fsi.exe", "--utf8output", "--gui-"],
@@ -25,7 +26,7 @@
                     "syntax": "Packages/F#/F#.tmLanguage"
                     }
                 }
-            ]   
+            ]
         }]
     }
 ]

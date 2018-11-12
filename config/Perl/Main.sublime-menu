@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open", 
+                {"command": "repl_open",
                  "caption": "Perl",
                  "id": "repl_Perl",
                  "mnemonic": "P",
@@ -18,10 +18,11 @@
                     "cmd": ["perl","${packages}/SublimeREPL/config/Perl/re.pl"],
                     "cwd": "$file_path",
                     "external_id": "perl",
+                    "view_id": "*REPL* [perl]",
                     "syntax": "Packages/Perl/Perl.tmLanguage"
                     }
                 }
-            ]   
+            ]
         }]
     }
 ]

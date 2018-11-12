@@ -20,6 +20,7 @@
                             "osx": ["io", "${packages}/SublimeREPL/config/Io/repl.io"]},
                     "cwd": "$file_path",
                     "external_id": "io",
+                    "view_id": "*REPL* [io]",
                     "suppress_echo": {"linux": true,
                                       "windows": false,
                                       "osx": true},

@@ -12,7 +12,6 @@
                  "command": "repl_open",
                  "caption": "Rails",
                  "id": "repl_rails",
-                 "external_id":"rails",
                  "mnemonic": "R",
                  "args":
                   {
@@ -28,6 +27,8 @@
                     "cwd":"$folder",
                     "cmd_postfix":"\n",
                     "autocomplete_server": true,
+                    "external_id":"rails",
+                    "view_id": "*REPL* [rails]",
                     "syntax": "Packages/Ruby/Ruby.tmLanguage"
                   }
                 }

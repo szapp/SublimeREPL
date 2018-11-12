@@ -15,6 +15,7 @@
                  "args": {
                     "type": "subprocess",
                     "external_id": "r",
+                    "view_id": "*REPL* [r]",
                     "additional_scopes": ["tex.latex.knitr"],
                     "additional_scopes": ["tex.latex.knitr.ing"],
                     "additional_scopes": ["tex.latex.knitr.beamer.ing"],
