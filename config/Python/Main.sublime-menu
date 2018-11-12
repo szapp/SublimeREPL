@@ -21,7 +21,7 @@
                         "encoding": "utf8",
                         "cmd": ["python", "-i", "-u"],
                         "cwd": "$file_path",
-                        "syntax": "Packages/Python/Python.tmLanguage",
+                        "syntax": "Packages/Text/Plain text.tmLanguage",
                         "external_id": "python",
                         "view_id": "*REPL* [python]",
                         "extend_env": {"PYTHONIOENCODING": "utf-8"}
@@ -74,7 +74,7 @@
                             "windows": ["python", "-u", "${packages}/SublimeREPL/config/Python/ipy_repl.py"]
                         },
                         "cwd": "$file_path",
-                        "syntax": "Packages/Python/Python.tmLanguage",
+                        "syntax": "Packages/Text/Plain text.tmLanguage",
                         "external_id": "python",
                         "view_id": "*REPL* [ipython]",
                         "extend_env": {
