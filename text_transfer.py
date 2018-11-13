@@ -186,6 +186,7 @@ class ReplSend(sublime_plugin.TextCommand):
             if with_auto_postfix:
                 text += rv.repl.cmd_postfix
             if sublime.load_settings(SETTINGS_FILE).get('show_transferred_text'):
+                rv.push_history(text)
                 rv.append_input_text(text)
                 rv.adjust_end()
             SENDERS[external_id](rv.repl, text, self.view, rv)
