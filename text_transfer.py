@@ -196,7 +196,7 @@ class ReplSend(sublime_plugin.TextCommand):
 
 
 class ReplTransferCurrent(sublime_plugin.TextCommand):
-    def run(self, edit, scope="selection", action="send"):
+    def run(self, edit, scope="selection", action="send", advance=False):
         text = ""
         if scope == "selection":
             text = self.selected_text()
@@ -207,7 +207,7 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         elif scope == "expression":
             text = self.selected_expressions()
         elif scope == "block":
-            text = self.selected_blocks()
+            text = self.selected_blocks(advance)
         elif scope == "file":
             text = self.selected_file()
         cmd = "repl_" + action
@@ -221,7 +221,13 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         parts = [v.substr(region) for region in v.sel()]
         return "".join(parts)
 
-    def selected_blocks(self):
+    def selected_blocks(self, advance=False):
+        for rv in manager.find_repl(self.repl_external_id()):
+            if rv.repl.name() == 'python':
+                return self.selected_blocks_python(advance)
+            else:
+                break
+
         # TODO: Lisp-family only for now
         v = self.view
         old_sel = list(v.sel())
@@ -235,6 +241,39 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         v.sel().clear()
         for s in old_sel:
             v.sel().add(s)
+
+        return "\n\n".join([v.substr(s) for s in sel])
+
+    def selected_blocks_python(self, advance=False):
+        v = self.view
+        blocks = v.find_all(r'^\s*#\s*%%')
+
+        if not blocks:
+            return self.selected_file()
+
+        blocks_start = [b.end() for b in blocks] + [v.size()]
+        blocks_end = [b.begin() for b in blocks]
+
+        sel = []
+        new_sel = []
+        for reg in v.sel():
+            start = 0
+            i = 0
+            while i < len(blocks_start)-1 and blocks_start[i] <= reg.begin():
+                start = blocks_start[i]
+                i += 1
+            end = v.size()
+            j = len(blocks_end)-1
+            while j >= 0 and blocks_end[j] >= reg.end():
+                end = blocks_end[j]
+                j -= 1
+
+            sel.append(sublime.Region(start, end))
+            new_sel.append(sublime.Region(blocks_start[i]))
+
+        if advance:
+            v.sel().clear()
+            v.sel().add_all(new_sel)
 
         return "\n\n".join([v.substr(s) for s in sel])
 
