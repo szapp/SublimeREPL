@@ -246,7 +246,7 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
 
     def selected_blocks_python(self, advance=False):
         v = self.view
-        blocks = v.find_all(r'^\s*#\s*%%')
+        blocks = v.find_all(r'^[[:blank:]]*#[[:blank:]]*%%')
 
         if not blocks:
             return self.selected_file()
