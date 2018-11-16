@@ -42,7 +42,7 @@ class HighlightPythonBlocks(sublime_plugin.ViewEventListener):
         v_id = view.buffer_id()
 
         # Only for python syntax
-        if not view.settings().get('syntax').find('python'):
+        if view.settings().get('syntax').find('ython') == -1:
             return
 
         # Find block indicators
