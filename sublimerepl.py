@@ -408,6 +408,8 @@ class ReplView(object):
         is_still_working = self.handle_repl_output()
         if is_still_working:
             sublime.set_timeout(self.update_view_loop, 100)
+            if sublime.active_window().active_view() == self._view:
+                self._last_active = datetime.now()
         else:
             self.write("\n***Repl Killed***\n""" if self.repl._killed else "\n***Repl Closed***\n""")
             self._view.set_read_only(True)
@@ -496,13 +498,18 @@ class ReplManager(object):
     def find_repl(self, external_id):
         """Yields rvews matching external_id taken from source.[external_id] scope
            Match is done on external_id value of repl and additional_scopes"""
+        rl = {}
         for rv in self.repl_views.values():
             if not (rv.repl and rv.repl.is_alive()):
                 continue  # dead repl, skip
             rvid = rv.external_id
             additional_scopes = rv.repl.additional_scopes
             if rvid == external_id or external_id in additional_scopes:
-                yield rv
+                rl[rv] = rv._last_active
+
+        # Sort repl by last visited
+        for rv in sorted(rl.items(), key=lambda kv: kv[1], reverse=True):
+            yield rv[0]
 
     def open(self, window, encoding, type, syntax=None, view_id=None, **kwds):
         repl_restart_args = {
