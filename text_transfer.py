@@ -210,6 +210,8 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
             text = self.selected_blocks(advance)
         elif scope == "file":
             text = self.selected_file()
+        else:
+            text = scope
         cmd = "repl_" + action
         self.view.window().run_command(cmd, {"external_id": self.repl_external_id(), "text": text})
 
