@@ -181,11 +181,12 @@ class ReplViewWrite(sublime_plugin.TextCommand):
 
 
 class ReplSend(sublime_plugin.TextCommand):
-    def run(self, edit, external_id, text, with_auto_postfix=True):
+    def run(self, edit, external_id, text, with_auto_postfix=True, hide=False):
         for rv in manager.find_repl(external_id):
             if with_auto_postfix:
                 text += rv.repl.cmd_postfix
-            if sublime.load_settings(SETTINGS_FILE).get('show_transferred_text'):
+            if sublime.load_settings(SETTINGS_FILE).get(
+                    'show_transferred_text') and not hide:
                 rv.push_history(text)
                 rv.append_input_text(text)
                 rv.adjust_end()
@@ -196,7 +197,8 @@ class ReplSend(sublime_plugin.TextCommand):
 
 
 class ReplTransferCurrent(sublime_plugin.TextCommand):
-    def run(self, edit, scope="selection", action="send", advance=False):
+    def run(self, edit, scope="selection", action="send", advance=False,
+            hide=False):
         text = ""
         if scope == "selection":
             text = self.selected_text()
@@ -213,7 +215,10 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         else:
             text = scope
         cmd = "repl_" + action
-        self.view.window().run_command(cmd, {"external_id": self.repl_external_id(), "text": text})
+        self.view.window().run_command(cmd,
+                                       {"external_id": self.repl_external_id(),
+                                        "text": text,
+                                        "hide": hide})
 
     def repl_external_id(self):
         return self.view.scope_name(0).split(" ")[0].split(".", 1)[1]
