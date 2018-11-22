@@ -105,6 +105,11 @@
     // 'auto', 'gtk', 'gtk3', 'inline', 'nbagg', 'notebook', 'osx', 'qt', 'qt4', 'qt5', 'tk', 'wx'
     "matplotlib": "inline",
 
+    // Set the interactive mode of pyplot, i.e. matplot.pyplot.ioff() or matplot.pyplot.ion()
+    // "True" has no effect, as pyplot is always interactive for IPython/jupyter
+    // "False" will cause the import matplotlib.pyplot in order to set ioff()
+    "pyplot_interactive": true,
+
     // Starting code for IPython console
     "ipython_exec_lines": [
         "import numpy as np",

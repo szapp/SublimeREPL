@@ -81,6 +81,7 @@
                             "PYTHONIOENCODING": "utf-8",
                             "SUBLIMEREPL_EDITOR": "$editor",
                             "SUBLIMEREPL_MATPLOTLIB": "$matplotlib",
+                            "SUBLIMEREPL_PYPLOT_INTER": "$pyplot_interactive",
                             "SUBLIMEREPL_EXEC_LINES": "$exec_lines"
                         }
                     }

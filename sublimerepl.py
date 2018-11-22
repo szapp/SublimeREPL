@@ -610,6 +610,17 @@ class ReplManager(object):
             "packages": sublime.packages_path(),
             "installed_packages": sublime.installed_packages_path()
         }
+
+        res["matplotlib"] = sublime.load_settings(SETTINGS_FILE).get(
+            "matplotlib", "inline")
+
+        res["pyplot_interactive"] = int(
+            sublime.load_settings(SETTINGS_FILE).get("pyplot_interactive",
+                                                     False))
+
+        res["exec_lines"] = '\n'.join(
+            sublime.load_settings(SETTINGS_FILE).get("ipython_exec_lines", []))
+
         if window.folders():
             res["folder"] = window.folders()[0]
         res["editor"] = "subl -w"
@@ -633,12 +644,6 @@ class ReplManager(object):
         if sublime.load_settings(SETTINGS_FILE).get("use_build_system_hack", False):
             project_settings = sublimerepl_build_system_hack.get_project_settings(window)
             res.update(project_settings)
-
-        res["matplotlib"] = sublime.load_settings(SETTINGS_FILE).get(
-            "matplotlib", "inline")
-
-        res["exec_lines"] = '\n'.join(
-            sublime.load_settings(SETTINGS_FILE).get("ipython_exec_lines", []))
 
         return res
 

@@ -43,6 +43,10 @@ if os.environ.get('SUBLIMEREPL_MATPLOTLIB'):
 
 exec_lines += os.environ.get('SUBLIMEREPL_EXEC_LINES', '').split('\n')
 
+if os.environ.get('SUBLIMEREPL_PYPLOT_INTER', True):
+    exec_lines.append('from matplotlib import pyplot as plt')
+    exec_lines.append('plt.ioff()')
+
 # IPython 4.0.0
 if version > 3:
     try:
