@@ -36,15 +36,12 @@ editor = "subl -w"
 
 cfg = Config()
 cfg.ZMQTerminalInteractiveShell.simple_prompt = True
-cfg.InteractiveShell.readline_use = False
-cfg.InteractiveShell.autoindent = False
-cfg.InteractiveShell.colors = "NoColor"
-cfg.InteractiveShell.editor = os.environ.get("SUBLIMEREPL_EDITOR", editor)
 
-exec_lines = [
-    r'%gui qt5',
-    r'%matplotlib qt5',
-]
+exec_lines = []
+if os.environ.get('SUBLIMEREPL_MATPLOTLIB'):
+    exec_lines.append(r'%matplotlib '+os.environ.get('SUBLIMEREPL_MATPLOTLIB'))
+
+exec_lines += os.environ.get('SUBLIMEREPL_EXEC_LINES', '').split('\n')
 
 # IPython 4.0.0
 if version > 3:
@@ -135,11 +132,22 @@ def handle():
     if ac_port:
         s.close()
 
+def inline_image(data):
+    if embedded_shell.shell.mime_preference[0] not in data.keys():
+        return False
+    msg = 'data:{};base64,{}'.format(
+        embedded_shell.shell.mime_preference[0],
+        data[embedded_shell.shell.mime_preference[0]])
+    print(msg)  # Picked up and replaced by REPL
+    return True
+
 if ac_port:
     t = threading.Thread(target=handle)
     t.setDaemon(True)
     t.start()
 
+embedded_shell.shell.callable_image_handler = inline_image
+embedded_shell.shell.image_handler = 'callable'
 embedded_shell.start()
 
 if ac_port:

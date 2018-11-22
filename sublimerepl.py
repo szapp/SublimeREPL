@@ -171,6 +171,10 @@ class ReplView(object):
         self._repl_reader = ReplReader(repl)
         self._repl_reader.start()
 
+        self.image_b64_cont = ''
+        self.image_phantom_set = sublime.PhantomSet(self._view,
+                                                    'ipython_images')
+
         settings = sublime.load_settings(SETTINGS_FILE)
 
         view.settings().set("repl_external_id", repl.external_id)
@@ -325,6 +329,30 @@ class ReplView(object):
 
     def write(self, unistr):
         """Writes output from Repl into this view."""
+        # Plotting inline images
+        if unistr.startswith('data:image/png;base64,') or self.image_b64_cont:
+            # Base64 is cut off after 4096
+            if len(unistr) == 4096 or unistr.find('\n') == -1:
+                self.image_b64_cont += unistr
+                return
+
+            # Stitch base64 string back together
+            unistr = self.image_b64_cont + unistr
+            self.image_b64_cont = ''
+
+            # Print rest of line normally before the image
+            unistr = unistr.split('\n', 1)
+            self.write(unistr[1].lstrip())
+            unistr = unistr[0]
+
+            # Show image
+            self._view.add_phantom('ipython_images',
+                                   sublime.Region(self._view.size()-1,
+                                                  self._view.size()),
+                                   '<body><img src="' + unistr + '"></body>',
+                                   sublime.LAYOUT_BLOCK)
+            return
+
         # remove color codes
         if self._filter_color_codes:
             unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
@@ -605,6 +633,12 @@ class ReplManager(object):
         if sublime.load_settings(SETTINGS_FILE).get("use_build_system_hack", False):
             project_settings = sublimerepl_build_system_hack.get_project_settings(window)
             res.update(project_settings)
+
+        res["matplotlib"] = sublime.load_settings(SETTINGS_FILE).get(
+            "matplotlib", "inline")
+
+        res["exec_lines"] = '\n'.join(
+            sublime.load_settings(SETTINGS_FILE).get("ipython_exec_lines", []))
 
         return res
 

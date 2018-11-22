@@ -79,7 +79,9 @@
                         "view_id": "*REPL* [ipython]",
                         "extend_env": {
                             "PYTHONIOENCODING": "utf-8",
-                            "SUBLIMEREPL_EDITOR": "$editor"
+                            "SUBLIMEREPL_EDITOR": "$editor",
+                            "SUBLIMEREPL_MATPLOTLIB": "$matplotlib",
+                            "SUBLIMEREPL_EXEC_LINES": "$exec_lines"
                         }
                     }
                     },

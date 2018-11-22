@@ -10,7 +10,7 @@
     // immediately on opening.
     // Setting this to true will simply move it to the 'next' group from the one
     // that was in focus when it was opened (one down with row layout, one
-    // to the right with column and grid layout). 
+    // to the right with column and grid layout).
     // Alternatively, you can set this to the index of the group in
     // which you want all repls to be opened (index 0 being the top-left group).
     // NOTE: Activating this option will NOT automatically change your layout or create
@@ -23,7 +23,7 @@
 
     // By default SublimeREPL leaves REPL view open once the underlying subprocess
     // dies or closes connection. This is useful when the process dies for an unexpected
-    // reason as it allows you to inspect it output. Setting this to true 
+    // reason as it allows you to inspect it output. Setting this to true
     // will cause SublimeREPL to close the REPL view once the process dies.
     "view_auto_close": false,
 
@@ -75,7 +75,7 @@
     // Mapping is used when external_id of REPL does not match
     // source.[xxx] scope of syntax definition used to highlight
     // files from which text is being transferred.
-    // For example, octave repls use source.matlab syntax files and without 
+    // For example, octave repls use source.matlab syntax files and without
     // this mapping text transfer will not work.
     "external_id_mapping": {
         "octave": "matlab"
@@ -87,7 +87,7 @@
 
     // If set to true, REPL view (tab) that receives text for evaluation will
     // be brought to front after text transfer.
-    // NOTE: This will not fire if REPL view is in the same tab group as 
+    // NOTE: This will not fire if REPL view is in the same tab group as
     // the view from which the code is sent.
     "focus_view_on_transfer": true,
 
@@ -99,5 +99,15 @@
     // treated as python file and is joined with root directory of the
     // selected virtualenv. For example, this is how you can setup django shell:
     // "custom_python_shells": {"django": "my_django_project/manage.py shell"}
-    "custom_python_shells": {}
+    "custom_python_shells": {},
+
+    // Set up the matplotlib interactive backend for the IPython console
+    // 'auto', 'gtk', 'gtk3', 'inline', 'nbagg', 'notebook', 'osx', 'qt', 'qt4', 'qt5', 'tk', 'wx'
+    "matplotlib": "inline",
+
+    // Starting code for IPython console
+    "ipython_exec_lines": [
+        "import numpy as np",
+        "from matplotlib import pyplot as plt"
+    ]
 }
