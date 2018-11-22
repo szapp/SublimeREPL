@@ -841,6 +841,7 @@ class SublimeReplListener(sublime_plugin.EventListener):
 
         return None
 
+
 class SubprocessReplSendSignal(sublime_plugin.TextCommand):
     def run(self, edit, signal=None):
         rv = manager.repl_view(self.view)
@@ -880,3 +881,10 @@ class SubprocessReplSendSignal(sublime_plugin.TextCommand):
 
     def description(self):
         return "Send SIGNAL"
+
+
+class ReplSendCodeCommand(sublime_plugin.TextCommand):
+    def run(self, edit, code=None):
+        rv = manager.repl_view(self.view)
+        if rv:
+            rv.run(edit, code)
