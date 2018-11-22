@@ -40,7 +40,11 @@ cfg.InteractiveShell.readline_use = False
 cfg.InteractiveShell.autoindent = False
 cfg.InteractiveShell.colors = "NoColor"
 cfg.InteractiveShell.editor = os.environ.get("SUBLIMEREPL_EDITOR", editor)
-# cfg.InteractiveShellApp.exec_lines = ["import sys, os; sys.path.append(os.getcwd())"]
+
+exec_lines = [
+    r'%gui qt5',
+    r'%matplotlib qt5',
+]
 
 # IPython 4.0.0
 if version > 3:
@@ -66,6 +70,7 @@ else:
 
 embedded_shell = ZMQTerminalIPythonApp(config=cfg, user_ns={})
 embedded_shell.initialize()
+embedded_shell.shell.run_cell('\n'.join(exec_lines), store_history=False)
 
 if os.name == "nt":
     import IPython.utils.io as io
@@ -132,6 +137,7 @@ def handle():
 
 if ac_port:
     t = threading.Thread(target=handle)
+    t.setDaemon(True)
     t.start()
 
 embedded_shell.start()
