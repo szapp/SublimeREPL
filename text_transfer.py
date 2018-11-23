@@ -196,6 +196,16 @@ class ReplSend(sublime_plugin.TextCommand):
             sublime.error_message("Cannot find REPL for '{}'".format(external_id))
 
 
+class ReplSendLogical(sublime_plugin.TextCommand):
+    def run(self, edit, external_id, text):
+        for rv in manager.find_repl(external_id):
+            rv.append_input_text(text)
+            rv.enter()
+            break  # send to first repl found
+        else:
+            sublime.error_message("Cannot find REPL for '{0}'".format(external_id))
+
+
 class ReplTransferCurrent(sublime_plugin.TextCommand):
     def run(self, edit, scope="selection", action="send", advance=False,
             hide=False):
@@ -215,10 +225,10 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         else:
             text = scope
         cmd = "repl_" + action
-        self.view.window().run_command(cmd,
-                                       {"external_id": self.repl_external_id(),
-                                        "text": text,
-                                        "hide": hide})
+        args = {"external_id": self.repl_external_id(), "text": text}
+        if action.lower() == 'send':
+            args['hide'] = hide
+        self.view.window().run_command(cmd, args)
 
     def repl_external_id(self):
         return self.view.scope_name(0).split(" ")[0].split(".", 1)[1]
