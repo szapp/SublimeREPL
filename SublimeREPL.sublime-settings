@@ -102,17 +102,21 @@
     "custom_python_shells": {},
 
     // Set up the matplotlib interactive backend for the IPython console
-    // 'auto', 'gtk', 'gtk3', 'inline', 'nbagg', 'notebook', 'osx', 'qt', 'qt4', 'qt5', 'tk', 'wx'
+    // Available matplotlib backends:  'tk', 'gtk', 'gtk3', 'wx', 'qt4', 'qt5',
+    //     'qt', 'osx', 'nbagg', 'notebook', 'agg', 'svg', 'pdf', 'ps',
+    //     'inline', 'ipympl', 'widget'
+    // Available backends may vary.
     "matplotlib": "inline",
 
     // Set the interactive mode of pyplot, i.e. matplot.pyplot.ioff() or matplot.pyplot.ion()
     // "True" has no effect, as pyplot is always interactive for IPython/jupyter
-    // "False" will cause the import matplotlib.pyplot in order to set ioff()
-    "pyplot_interactive": true,
+    // "False" is recommended for gui backends. It will cause the import of
+    // matplotlib.pyplot in order to set ioff()
+    "pyplot_interactive": false,
 
-    // Starting code for IPython console
-    "ipython_exec_lines": [
-        "import numpy as np",
-        "from matplotlib import pyplot as plt"
-    ]
+    // RC parameters specific for the inline backend. The defaults will be updated with this dictionary
+    "pyplot_inlinerc": {},
+
+    // Lines of code to execute when starting IPython console
+    "ipython_execlines": [],
 }

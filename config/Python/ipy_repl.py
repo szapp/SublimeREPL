@@ -38,14 +38,29 @@ cfg = Config()
 cfg.ZMQTerminalInteractiveShell.simple_prompt = True
 
 exec_lines = []
-if os.environ.get('SUBLIMEREPL_MATPLOTLIB'):
-    exec_lines.append(r'%matplotlib '+os.environ.get('SUBLIMEREPL_MATPLOTLIB'))
+backend = os.environ.get('SUBLIMEREPL_MATPLOTLIB')
+if backend:
+    exec_lines.append(r'%matplotlib ' + backend)
+
+    if backend == 'inline':
+        # Set inline rc params
+        exec_lines.append(r'_x = %config InlineBackend.rc')
+        exec_lines.append('_x.update('
+                          + os.environ.get('SUBLIMEREPL_PYPLOT_INLINERC')
+                          + ')')
+        exec_lines.append(r'%config InlineBackend.rc=_x')
+        exec_lines.append('del _x')
+        exec_lines.append(r'%matplotlib inline')
+    elif not int(os.environ.get('SUBLIMEREPL_PYPLOT_INTER')):
+        # Set plotting to non-interactive
+        exec_lines.append('from matplotlib import pyplot as plt')
+        exec_lines.append('plt.ioff()')
 
 exec_lines += os.environ.get('SUBLIMEREPL_EXEC_LINES', '').split('\n')
 
-if os.environ.get('SUBLIMEREPL_PYPLOT_INTER', True):
-    exec_lines.append('from matplotlib import pyplot as plt')
-    exec_lines.append('plt.ioff()')
+exec_lines = [el.replace(
+    '[LCURLYBRACKET]', '{').replace(
+    '[RCURLYBRACKET]', '}') for el in exec_lines]
 
 # IPython 4.0.0
 if version > 3:

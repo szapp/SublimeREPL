@@ -82,6 +82,7 @@
                             "SUBLIMEREPL_EDITOR": "$editor",
                             "SUBLIMEREPL_MATPLOTLIB": "$matplotlib",
                             "SUBLIMEREPL_PYPLOT_INTER": "$pyplot_interactive",
+                            "SUBLIMEREPL_PYPLOT_INLINERC": "$pyplot_inlinerc",
                             "SUBLIMEREPL_EXEC_LINES": "$exec_lines"
                         }
                     }

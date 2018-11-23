@@ -603,6 +603,12 @@ class ReplManager(object):
         return obj
 
     @staticmethod
+    def _replace_brackets(sstr):
+        sstr = sstr.replace('{', '[LCURLYBRACKET]')
+        sstr = sstr.replace('}', '[RCURLYBRACKET]')
+        return sstr
+
+    @staticmethod
     def _subst_for_translate(window):
         """ Return all available substitutions"""
         import locale
@@ -615,11 +621,13 @@ class ReplManager(object):
             "matplotlib", "inline")
 
         res["pyplot_interactive"] = int(
-            sublime.load_settings(SETTINGS_FILE).get("pyplot_interactive",
-                                                     False))
+            sublime.load_settings(SETTINGS_FILE).get("pyplot_interactive", 0))
 
-        res["exec_lines"] = '\n'.join(
-            sublime.load_settings(SETTINGS_FILE).get("ipython_exec_lines", []))
+        res["pyplot_inlinerc"] = ReplManager._replace_brackets(str(
+            sublime.load_settings(SETTINGS_FILE).get("pyplot_inlinerc", {})))
+
+        res["exec_lines"] = ReplManager._replace_brackets('\n'.join(
+            sublime.load_settings(SETTINGS_FILE).get("ipython_execlines", [])))
 
         if window.folders():
             res["folder"] = window.folders()[0]
