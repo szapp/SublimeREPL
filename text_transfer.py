@@ -292,6 +292,7 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         if advance:
             v.sel().clear()
             v.sel().add_all(new_sel)
+            v.show(v.sel())
 
         return "\n\n".join([v.substr(s) for s in sel])
 
