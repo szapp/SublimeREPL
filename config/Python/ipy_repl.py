@@ -38,6 +38,8 @@ cfg = Config()
 cfg.ZMQTerminalInteractiveShell.simple_prompt = True
 
 exec_lines = []
+exec_lines.append('import sys')
+exec_lines.append('sys.stdout.flush_interval = 0')
 backend = os.environ.get('SUBLIMEREPL_MATPLOTLIB')
 if backend:
     exec_lines.append(r'%matplotlib ' + backend)
