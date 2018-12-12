@@ -1,5 +1,6 @@
 from __future__ import absolute_import, unicode_literals, print_function, division
 
+import os
 import re
 import sublime_plugin
 import sublime
@@ -319,5 +320,8 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         return "\n".join(parts)
 
     def selected_file(self):
+        if self.view.file_name():
+            os.chdir(os.path.dirname(self.view.file_name()))
+
         v = self.view
         return v.substr(sublime.Region(0, v.size()))
