@@ -211,6 +211,9 @@ class SubprocessRepl(Repl):
         return creationflags
 
     def name(self):
+        if isinstance(self._cmd,
+                      list) and self._cmd[-1].endswith('ipy_repl.py'):
+            return 'ipython'
         if self.external_id:
             return self.external_id
         if isinstance(self._cmd, str):
