@@ -229,6 +229,8 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         args = {"external_id": self.repl_external_id(), "text": text}
         if action.lower() == 'send':
             args['hide'] = hide
+        if self.view.file_name():
+            os.chdir(os.path.dirname(self.view.file_name()))
         self.view.window().run_command(cmd, args)
 
     def repl_external_id(self):
@@ -241,7 +243,7 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
 
     def selected_blocks(self, advance=False):
         for rv in manager.find_repl(self.repl_external_id()):
-            if rv.repl.name() == 'python':
+            if rv.repl.name().endswith('python'):
                 return self.selected_blocks_python(advance)
             else:
                 break
@@ -320,8 +322,5 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         return "\n".join(parts)
 
     def selected_file(self):
-        if self.view.file_name():
-            os.chdir(os.path.dirname(self.view.file_name()))
-
         v = self.view
         return v.substr(sublime.Region(0, v.size()))
