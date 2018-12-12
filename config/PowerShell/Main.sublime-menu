@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open",
+                {"command": "repl_open", 
                  "caption": "PowerShell",
                  "id": "repl_powershell",
                  "mnemonic": "P",
@@ -18,11 +18,10 @@
                     "cmd": ["powershell", "-"],
                     "cwd": "$file_path",
                     "external_id": "powershell",
-                    "view_id": "*REPL* [powershell]",
                     "syntax": "Packages/PowerShell/Support/PowershellSyntax.tmLanguage"
                     }
                 }
-            ]
+            ]   
         }]
     }
 ]

@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open",
+                {"command": "repl_open", 
                  "caption": "MozRepl",
                  "mnemonic": "M",
                  "id": "repl_mozrepl",
@@ -17,11 +17,10 @@
                     "encoding": "utf8",
                     "host":"localhost",
                     "port": 4242,
-                    "syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-                    "view_id": "*REPL* [js]"
+                    "syntax": "Packages/JavaScript/JavaScript.tmLanguage"
                     }
                 }
-            ]
+            ]   
         }]
     }
 ]

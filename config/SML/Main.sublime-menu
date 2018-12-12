@@ -17,7 +17,6 @@
                     "cmd": ["sml"],
                     "cwd": "$file_path",
                     "external_id": "sml",
-                    "view_id": "*REPL* [sml]",
                     "syntax": "Packages/SML (Standard ML)/sml.tmLanguage"
                     }
                 }

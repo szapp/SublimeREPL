@@ -21,7 +21,6 @@
                     "cwd": "$file_path",
                     "syntax": "Packages/JavaScript/JavaScript.tmLanguage",
                     "external_id": "js",
-                    "view_id": "*REPL* [js]",
                     "autocomplete_server": true,
                     "extend_env": {"NODE_NO_READLINE": 1}
                     }

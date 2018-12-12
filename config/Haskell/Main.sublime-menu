@@ -22,7 +22,6 @@
                     "cmd": ["ghci"],
                     "cwd": "$file_path",
                     "external_id": "haskell",
-                    "view_id": "*REPL* [haskell]",
                     "additional_scopes": ["haskell.bird"],
                     "syntax": "Packages/Haskell/Haskell.tmLanguage"
                 }

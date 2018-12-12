@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open",
+                {"command": "repl_open", 
                 "id": "repl_elixir",
                  "caption": "Elixir",
                  "args": {
@@ -18,11 +18,10 @@
                     "cwd": "$file_path",
                     "syntax": "Packages/Elixir/Elixir.tmLanguage",
                     "external_id": "elixir",
-                    "view_id": "*REPL* [elixir]",
                     "extend_env": {"NODE_DISABLE_COLORS": "1"}
                     }
                 }
-            ]
+            ]   
         }]
     }
 ]

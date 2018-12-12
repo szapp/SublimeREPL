@@ -18,8 +18,7 @@
                             "cmd": ["racket"],
                             "cwd": "$file_path",
                             "syntax": "Packages/Racket/Racket.tmLanguage",
-                            "external_id": "racket",
-                            "view_id": "*REPL* [racket]"
+                            "external_id": "racket"
                         }
                     }
                 ]

@@ -18,7 +18,6 @@
                 "args":{
                   "type":"subprocess",
                   "external_id":"ruby",
-                  "view_id": "*REPL* [ruby]",
                   "encoding":"utf8",
                   "cmd":{
                     "windows":[
@@ -52,7 +51,6 @@
                 "args":{
                   "type":"subprocess",
                   "external_id":"ruby",
-                  "view_id": "*REPL* [ruby]",
                   "encoding":"utf8",
                   "cmd":{
                     "windows":[

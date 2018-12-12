@@ -11,7 +11,7 @@
                 {"caption": "Clojure",
                  "id": "Clojure",
                  "children":[
-                    {"command": "repl_open",
+                    {"command": "repl_open", 
                      "caption": "Clojure",
                      "id": "repl_clojure",
                      "args": {
@@ -26,14 +26,13 @@
                                 "osx": "$file_path"},
                         "syntax": "Packages/Clojure/Clojure.tmLanguage",
                         "external_id": "clojure",
-                        "view_id": "*REPL* [clojure]",
                         "extend_env": {"INSIDE_EMACS": "1"}
                         }
                     },
-                    {"command": "clojure_auto_telnet_repl",
+                    {"command": "clojure_auto_telnet_repl", 
                      "id": "repl_clojure_telnet",
                      "caption": "Clojure-Telnet"}]}
-            ]
+            ]   
         }]
     }
 ]

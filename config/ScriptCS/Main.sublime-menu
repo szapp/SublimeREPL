@@ -15,7 +15,6 @@
                  "args": {
                     "type": "subprocess",
                     "external_id": "scriptcs",
-                    "view_id": "*REPL* [scriptcs]",
                     "encoding": "utf8",
                     "cmd": {
                             "windows": ["scriptcs"],

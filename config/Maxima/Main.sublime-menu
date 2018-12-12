@@ -17,8 +17,7 @@
                     "encoding": "utf8",
                     "cmd": ["maxima"],
                     "cwd": "$file_path",
-                    "external_id": "maxima",
-                    "view_id": "*REPL* [maxima]"
+                    "external_id": "maxima"
                     }
                 }
             ]

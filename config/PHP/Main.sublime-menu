@@ -8,7 +8,7 @@
             "id": "SublimeREPL",
             "children":
             [
-                {"command": "repl_open",
+                {"command": "repl_open", 
                  "caption": "PHP",
                  "id": "repl_php",
                  "mnemonic": "P",
@@ -21,14 +21,13 @@
                             "linux": ["php", "-a"],
                             "osx": ["php", "-a"]},
                     "cwd": "$file_path",
-                    "cmd_postfix": "\n",
+                    "cmd_postfix": "\n", 
                     "env": {},
-                    "suppress_echo": false,
-                    "syntax": "Packages/Text/Plain text.tmLanguage",
-                    "view_id": "*REPL* [php]"
+                    "suppress_echo": false, 
+                    "syntax": "Packages/Text/Plain text.tmLanguage"
                     }
                 }
-            ]
+            ]   
         }]
     }
 ]

@@ -18,7 +18,6 @@
                     "cmd": ["octave", "-i"],
                     "cwd": "$file_path",
                     "external_id": "octave",
-                    "view_id": "*REPL* [octave]",
                     "additional_scopes": ["matlab"],
                     "syntax": "Packages/Matlab/Matlab.tmLanguage"
                     }

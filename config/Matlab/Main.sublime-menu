@@ -18,7 +18,6 @@
                     "cmd": ["matlab", "-nodesktop","-nosplash"],
                     "cwd": "$file_path",
                     "external_id": "matlab",
-                    "view_id": "*REPL* [matlab]",
                     "syntax": "Packages/Matlab/Matlab.tmLanguage"
                     }
                 }

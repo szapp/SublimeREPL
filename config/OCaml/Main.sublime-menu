@@ -18,7 +18,6 @@
                 "args":{
                   "type":"subprocess",
                   "external_id":"ocaml",
-                  "view_id": "*REPL* [ocaml]",
                   "encoding":"utf8",
                   "cmd":{
                     "windows":[
@@ -46,7 +45,6 @@
                 "args":{
                   "type":"sublime_utop",
                   "external_id":"ocaml",
-                  "view_id": "*REPL* [ocaml]",
                   "encoding":"utf8",
                   "cmd":{
                     "windows":[
