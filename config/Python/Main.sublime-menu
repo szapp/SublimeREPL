@@ -72,7 +72,8 @@
                         },
                         "cwd": "$file_path",
                         "syntax": "Packages/Python/Python.tmLanguage",
-                        "external_id": "python",
+                        "external_id": "ipython",
+                        "additional_scopes": ["python"],
                         "extend_env": {
                             "PYTHONIOENCODING": "utf-8",
                             "SUBLIMEREPL_EDITOR": "$editor",

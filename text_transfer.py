@@ -5,7 +5,6 @@ import re
 import sublime_plugin
 import sublime
 from collections import defaultdict
-import tempfile
 import binascii
 
 try:
@@ -53,8 +52,12 @@ def coffee(repl, text, view=None, repl_view=None):
     """
     default_sender(repl, text.replace("\n", u'\uFF00') + "\n", view, repl_view)
 
+
 @sender("python")
 def python_sender(repl, text, view=None, repl_view=None):
+    # Possible special treatment for IPython
+    if repl.external_id == 'ipython':
+        pass
     text_wo_encoding = re.sub(
         pattern=r"#.*coding[:=]\s*([-\w.]+)",
         repl="# <SublimeREPL: encoding comment removed>",
@@ -128,6 +131,7 @@ def clojure_sender(repl, text, view, repl_view=None):
                 pos = namespace.end()
     return default_sender(repl, text + repl.cmd_postfix, view, repl_view)
 
+
 @sender("lisp")
 def lisp_sender(repl, text, view, repl_view=None):
     def find_package_name(point):
@@ -172,6 +176,7 @@ def lisp_sender(repl, text, view, repl_view=None):
 
     return default_sender(repl, text + repl.cmd_postfix, view, repl_view)
 
+
 class ReplViewWrite(sublime_plugin.TextCommand):
     def run(self, edit, external_id, text):
         for rv in manager.find_repl(external_id):
@@ -191,7 +196,10 @@ class ReplSend(sublime_plugin.TextCommand):
                 rv.push_history(text)
                 rv.append_input_text(text)
                 rv.adjust_end()
-            SENDERS[external_id](rv.repl, text, self.view, rv)
+            if rv.external_id in SENDERS:
+                SENDERS[rv.external_id](rv.repl, text, self.view, rv)
+            else:
+                SENDERS[external_id](rv.repl, text, self.view, rv)
             break
         else:
             sublime.error_message("Cannot find REPL for '{}'".format(external_id))
@@ -229,8 +237,6 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         args = {"external_id": self.repl_external_id(), "text": text}
         if action.lower() == 'send':
             args['hide'] = hide
-        if self.view.file_name():
-            os.chdir(os.path.dirname(self.view.file_name()))
         self.view.window().run_command(cmd, args)
 
     def repl_external_id(self):
@@ -242,11 +248,8 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         return "".join(parts)
 
     def selected_blocks(self, advance=False):
-        for rv in manager.find_repl(self.repl_external_id()):
-            if rv.repl.name().endswith('python'):
-                return self.selected_blocks_python(advance)
-            else:
-                break
+        if 'python' in self.repl_external_id():
+            return self.selected_blocks_python(advance)
 
         # TODO: Lisp-family only for now
         v = self.view
@@ -322,5 +325,15 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
         return "\n".join(parts)
 
     def selected_file(self):
+        # Change working directory to path of file
+        fpath = os.path.dirname(self.view.file_name())
+        if fpath:
+            for rv in manager.find_repl(self.repl_external_id()):
+                # So far only python support
+                if 'python' in rv.external_id:
+                    code = "import os; os.chdir('" + fpath + "'); "
+                    rv.repl.popen.stdin.write(bytes(code, 'UTF-8'))
+                break
+
         v = self.view
         return v.substr(sublime.Region(0, v.size()))
