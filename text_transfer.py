@@ -326,8 +326,8 @@ class ReplTransferCurrent(sublime_plugin.TextCommand):
 
     def selected_file(self):
         # Change working directory to path of file
-        fpath = os.path.dirname(self.view.file_name())
-        if fpath:
+        if self.view.file_name():
+            fpath = os.path.dirname(self.view.file_name())
             for rv in manager.find_repl(self.repl_external_id()):
                 # So far only python support
                 if 'python' in rv.external_id:

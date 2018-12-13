@@ -40,6 +40,13 @@ RESTART_MSG = """
 #############
 """
 
+ipython_error_pattern = re.compile(
+    r'from binascii import unhexlify as __un; '
+    r'exec\(compile\(__un\(\"\w+\"\)\.decode\(\"utf-8\"\), '
+    r'\"\<string\>\", \"exec\"\)\)'
+)
+
+
 class ReplInsertTextCommand(sublime_plugin.TextCommand):
     def run(self, edit, pos, text):
         self.view.set_read_only(False)  # make sure view is writable
@@ -360,6 +367,9 @@ class ReplView(object):
         if self._filter_color_codes:
             unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
             unistr = re.sub(r'\x01\x02', '', unistr)
+
+        # Remove encoded IPython error string
+        unistr = ipython_error_pattern.sub('[...]', unistr)
 
         # Split text by each line
         for part_n in unistr.splitlines(True):
