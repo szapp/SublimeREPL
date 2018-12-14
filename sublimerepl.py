@@ -40,12 +40,6 @@ RESTART_MSG = """
 #############
 """
 
-ipython_error_pattern = re.compile(
-    r'from binascii import unhexlify as __un; '
-    r'exec\(compile\(__un\(\"\w+\"\)\.decode\(\"utf-8\"\), '
-    r'\"\<string\>\", \"exec\"\)\)'
-)
-
 
 class ReplInsertTextCommand(sublime_plugin.TextCommand):
     def run(self, edit, pos, text):
@@ -178,6 +172,7 @@ class ReplView(object):
         self._repl_reader = ReplReader(repl)
         self._repl_reader.start()
 
+        self.ipy_err_cont = False
         self.image_b64_cont = ''
         self.image_phantom_set = sublime.PhantomSet(self._view,
                                                     'ipython_images')
@@ -368,8 +363,21 @@ class ReplView(object):
             unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
             unistr = re.sub(r'\x01\x02', '', unistr)
 
-        # Remove encoded IPython error string
-        unistr = ipython_error_pattern.sub('[...]', unistr)
+        # Remove encoded IPython error string (unistr is split up in chunks)
+        ipy_err_match = unistr.find('from binascii import unhexlify as __un; '
+                                    'exec(compile(__un("')
+        ipy_err_match_end = unistr.find('").decode("utf-8"), "<string>", '
+                                        '"exec"))')
+        if ipy_err_match != -1 or self.ipy_err_cont:
+            if ipy_err_match != -1:
+                self.ipy_err_cont = True
+                unistr = unistr[:ipy_err_match]
+            if ipy_err_match_end != -1:
+                self.ipy_err_cont = False
+                unistr = unistr[ipy_err_match_end+len('").decode("utf-8"), '
+                                                      '"<string>", "exec"))'):]
+            if ipy_err_match == -1 and ipy_err_match_end == -1:
+                return
 
         # Split text by each line
         for part_n in unistr.splitlines(True):
