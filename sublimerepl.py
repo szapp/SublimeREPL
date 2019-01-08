@@ -369,15 +369,17 @@ class ReplView(object):
         ipy_err_match_end = unistr.find('").decode("utf-8"), "<string>", '
                                         '"exec"))')
         if ipy_err_match != -1 or self.ipy_err_cont:
-            if ipy_err_match != -1:
-                self.ipy_err_cont = True
-                unistr = unistr[:ipy_err_match]
-            if ipy_err_match_end != -1:
-                self.ipy_err_cont = False
-                unistr = unistr[ipy_err_match_end+len('").decode("utf-8"), '
-                                                      '"<string>", "exec"))'):]
             if ipy_err_match == -1 and ipy_err_match_end == -1:
                 return
+            snew = ''
+            if ipy_err_match != -1:
+                self.ipy_err_cont = True
+                snew += unistr[:ipy_err_match]
+            if ipy_err_match_end != -1:
+                self.ipy_err_cont = False
+                snew += unistr[ipy_err_match_end+len('").decode("utf-8"), '
+                                                     '"<string>", "exec"))'):]
+            unistr = snew
 
         # Split text by each line
         for part_n in unistr.splitlines(True):
