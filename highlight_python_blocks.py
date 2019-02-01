@@ -25,6 +25,11 @@ stylesheet = '''
 '''
 
 
+def plugin_loaded():
+    for view in sublime.active_window().views():
+        update_regions(view, HighlightPythonBlocks.phantom_set)
+
+
 class HighlightPythonBlocks(sublime_plugin.ViewEventListener):
     phantom_set = dict()
 
@@ -38,30 +43,32 @@ class HighlightPythonBlocks(sublime_plugin.ViewEventListener):
         self.update_regions()
 
     def update_regions(self):
-        view = self.view
-        v_id = view.buffer_id()
+        update_regions(self.view, self.phantom_set)
 
-        # Only for python syntax
-        if view.settings().get('syntax').find('ython') == -1:
-            return
 
-        # Find block indicators
-        blocks = view.find_all(r'^[[:blank:]]*#[[:blank:]]*%%')
+def update_regions(view, phantom_set):
+    # Only for python syntax
+    if view.settings().get('syntax').find('ython') == -1:
+        return
 
-        phantoms = []
-        for block in blocks:
+    # Find block indicators
+    blocks = view.find_all(r'^[[:blank:]]*#[[:blank:]]*%%')
 
-            # Get previous line
-            block = view.line(block)
-            block = sublime.Region(block.begin()-1, block.begin()-1)
-            block = view.line(block)
+    phantoms = []
+    for block in blocks:
 
-            # Create phantom
-            phantoms.append(sublime.Phantom(
-                block,
-                ('<body id="py_blocks">' + stylesheet +
-                 '<div class="horz">' + '&nbsp;' * 79 + '</div></body>'),
-                sublime.LAYOUT_BLOCK))
+        # Get previous line
+        block = view.line(block)
+        block = sublime.Region(block.begin()-1, block.begin()-1)
+        block = view.line(block)
 
-        self.phantom_set[v_id] = sublime.PhantomSet(view, 'py_blocks')
-        self.phantom_set[v_id].update(phantoms)
+        # Create phantom
+        phantoms.append(sublime.Phantom(
+            block,
+            ('<body id="py_blocks">' + stylesheet +
+             '<div class="horz">' + '&nbsp;' * 79 + '</div></body>'),
+            sublime.LAYOUT_BLOCK))
+
+    v_id = view.buffer_id()
+    phantom_set[v_id] = sublime.PhantomSet(view, 'py_blocks')
+    phantom_set[v_id].update(phantoms)
