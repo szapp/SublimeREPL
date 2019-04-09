@@ -410,6 +410,14 @@ class ReplView(object):
                     self._output_end = self._view.full_line(
                         self._output_end).begin()
 
+        # Remove trailing text (after backspace) in final output
+        if self._view.full_line(self._output_end).end() > self._output_end:
+            o_start = self._output_end - self._prompt_size
+            o_end = self._view.full_line(self._output_end).end()
+            self._view.run_command("repl_erase_text",
+                                   {"start": o_start,
+                                    "end": o_end})
+
     def write_prompt(self, unistr):
         """Writes prompt from REPL into this view. Prompt is treated like
            regular output, except output is inserted before the prompt."""
