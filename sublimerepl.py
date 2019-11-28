@@ -363,6 +363,10 @@ class ReplView(object):
             unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
             unistr = re.sub(r'\x01\x02', '', unistr)
 
+        # Remove triple quotes
+        unistr = re.sub(r'\"\"\"', '\"\'\"', unistr)
+        unistr = re.sub(r'\'\'\'', '\'\"\'', unistr)
+
         # Remove encoded IPython error string (unistr is split up in chunks)
         ipy_err_match = unistr.find('from binascii import unhexlify as __un; '
                                     'exec(compile(__un("')
