@@ -360,7 +360,7 @@ class ReplView(object):
 
         # remove color codes
         if self._filter_color_codes:
-            unistr = re.sub(r'\033\[\d*(;\d*)?\w', '', unistr)
+            unistr = re.sub(r'\033\[\d*(;\d*)?m', '', unistr)
             unistr = re.sub(r'\x01\x02', '', unistr)
 
         # Remove triple quotes
@@ -385,42 +385,80 @@ class ReplView(object):
                                                      '"<string>", "exec"))'):]
             unistr = snew
 
+        newline = {'Unix': '\n',
+                   'Windows': '\r\n',
+                   'Max OS 9': '\n\r'}.get(self.view.line_endings(), '\n')
+
         # Split text by each line
-        for part_n in unistr.splitlines(True):
+        parts_n = unistr.split(newline)
+        for i, part_n in enumerate(parts_n):
 
             # Split line by carriage returns
             parts_r = part_n.split('\x0D')
             for j, part_r in enumerate(parts_r):
 
-                # Split line parts by backspaces
-                parts_b = part_r.split('\x08')
-                for k, part_b in enumerate(parts_b):
+                # Split by moving up
+                parts_u = part_r.split('\x1b[A')
+                for k, part_u in enumerate(parts_u):
 
-                    # Overwrite or insert text
-                    o_end = self._output_end - self._prompt_size
-                    self._view.run_command("repl_overwrite_text",
-                                           {"start": o_end,
-                                            "end": o_end+len(part_b),
-                                            "text": part_b})
-                    self._output_end += len(part_b)
-                    self._view.show(self.input_region)
+                    # Split line parts by backspaces
+                    parts_b = part_u.split('\x08')
+                    for l, part_b in enumerate(parts_b):
 
-                    # Perform backspace on all but last item
-                    if k+1 < len(parts_b):
-                        self._output_end -= 1
+                        # Overwrite or insert text
+                        o_end = self._output_end - self._prompt_size
+                        o_newend = min(self._view.line(o_end).end(),
+                                       o_end + len(part_b))
+                        self._view.run_command("repl_overwrite_text",
+                                               {"start": o_end,
+                                                "end": o_newend,
+                                                "text": part_b})
+                        self._output_end += len(part_b)
+                        self._view.show(self.input_region)
+
+                        # Fix selection
+                        self.view.sel().clear()
+                        self.view.sel().add(sublime.Region(self._output_end,
+                                                           self._output_end))
+
+                        # Perform backspace on all but last item
+                        if l+1 < len(parts_b):
+                            self._output_end -= 1
+
+                    # Perform moving up on all but the last item
+                    if k+1 < len(parts_u):
+                        k_beg = self._view.full_line(self._output_end).begin()
+                        ku_beg = self._view.full_line(k_beg - 1).begin()
+
+                        k_len = self._view.line(self._output_end).size()
+                        ku_len = self._view.line(ku_beg).size()
+
+                        k_diff = ku_len - k_len
+
+                        if k_diff < 0:
+                            self._view.run_command("repl_insert_text", {
+                                "pos": self._output_end - k_len - len(newline),
+                                "text": ' ' * -k_diff
+                            })
+                        self._output_end -= k_len + k_diff + 1
 
                 # Perform carriage return (jump to beginning of current line)
                 if j+1 < len(parts_r):
                     self._output_end = self._view.full_line(
                         self._output_end).begin()
 
-        # Remove trailing text (after backspace) in final output
-        if self._view.full_line(self._output_end).end() > self._output_end:
-            o_start = self._output_end - self._prompt_size
-            o_end = self._view.full_line(self._output_end).end()
-            self._view.run_command("repl_erase_text",
-                                   {"start": o_start,
-                                    "end": o_end})
+            # Perform line break (keep remainder of line) on all but last item
+            if i+1 < len(parts_n):
+                self._view.run_command("repl_overwrite_text", {
+                    "start": self._view.line(self._output_end).end(),
+                    "end": self._view.full_line(self._output_end).end(),
+                    "text": newline})
+                self._output_end = self._view.full_line(self._output_end).end()
+
+                # Fix selection
+                self.view.sel().clear()
+                self.view.sel().add(sublime.Region(self._output_end,
+                                                   self._output_end))
 
     def write_prompt(self, unistr):
         """Writes prompt from REPL into this view. Prompt is treated like
