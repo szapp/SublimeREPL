@@ -65,6 +65,12 @@ exec_lines = [el.replace(
     '[LCURLYBRACKET]', '{').replace(
     '[RCURLYBRACKET]', '}') for el in exec_lines]
 
+# Temporary fix to prevent import error of removed function
+if IPYTHON:
+    def no_code(x, encoding=None):
+        return x
+    IPython.utils.py3compat.cast_unicode_py2 = no_code
+
 # IPython 4.0.0
 if version > 3:
     try:
